@@ -1,0 +1,9 @@
+version: "2.1"
+services:
+  activity_map_frontend:
+    build: .
+    container_name: activity_map_frontend
+    volumes:
+      - /src/data:/app
+    ports:
+      - 5173:5173
