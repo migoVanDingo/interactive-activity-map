@@ -12,7 +12,7 @@ import styled from "styled-components"
 import { SFlexCol, SFlexRow } from "../../styled/containers/FlexContainers"
 
 const SContainer = styled(SFlexRow)`
-  border: 1px solid ${({ theme }) => theme.color.color_5};
+  border: 1px solid ${({ theme }) => theme.colors.color3};
   box-sizing: border-box;
   height: 25px;
   padding: 3px;
@@ -21,7 +21,7 @@ const SContainer = styled(SFlexRow)`
   
 
   &:hover {
-    border: 1px solid ${({ theme }) => theme.color.color_7};
+    border: 1px solid ${({ theme }) => theme.colors.color5};
     cursor: pointer;
   }
 `
@@ -35,11 +35,11 @@ const SButtonContainer = styled(SFlexCol)`
 const SIcon = styled(FontAwesomeIcon)`
   height: 13px;
   width: 13px;
-  color: ${({ theme }) => theme.color.color_5};
+  color: ${({ theme }) => theme.colors.color3};
   padding: 3px 3px 3px 0;
 
   &.hover {
-    color: ${({ theme }) => theme.color.color_7};
+    color: ${({ theme }) => theme.colors.color5};
   }
 
   &.dropdown {
@@ -51,15 +51,16 @@ const SMenu = styled.ul`
   position: absolute;
   top: 28px;
   right: 0;
-  background-color: ${({ theme }) => theme.color.color_2};
+  background-color: ${({ theme }) => theme.colors.color0};
+  opacity: 1;
   padding: 5px;
-  border-radius: ${({ theme }) => theme.container.borderRadius.md};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 0;
   box-sizing: border-box;
-  box-shadow: 2px 2px 6px ${({ theme }) => theme.color.shadow.dark};
+  box-shadow: 2px 2px 6px ${({ theme }) => theme.colors.color5};
   z-index: 10;
 `
 
@@ -69,10 +70,10 @@ const SListItem = styled.li`
   padding: 7px 15px;
   font-size: 0.8rem;
   box-sizing: border-box;
-  color: ${({ theme }) => theme.color.color_5};
+  color: ${({ theme }) => theme.colors.color3};
   &:hover {
-    background-color: ${({ theme }) => theme.color.color_3};
-    color: ${({ theme }) => theme.color.color_7};
+    background-color: ${({ theme }) => theme.colors.levelq};
+    color: ${({ theme }) => theme.colors.color5};
     cursor: pointer;
   }
 `

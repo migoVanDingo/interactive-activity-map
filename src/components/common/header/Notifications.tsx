@@ -5,7 +5,7 @@ import styled from "styled-components"
 import { SFlexRow } from "../../styled/containers/FlexContainers"
 
 const SContainer = styled(SFlexRow)`
-  border: 1px solid ${({ theme }) => theme.color.color_5};
+  border: 1px solid ${({ theme }) => theme.colors.color3};
   height: 26px;
   padding: 3px 5px;
   border-radius: 4px;
@@ -13,17 +13,17 @@ const SContainer = styled(SFlexRow)`
   box-sizing: border-box;
 
   &:hover {
-    border: 1px solid ${({ theme }) => theme.color.color_7};
+    border: 1px solid ${({ theme }) => theme.colors.color5};
     cursor: pointer;
   }
 
 `
 
 const SIcon = styled(FontAwesomeIcon)`
-  color: ${({ theme }) => theme.color.color_5};
+  color: ${({ theme }) => theme.colors.color3};
 
   &.hover {
-    color: ${({ theme }) => theme.color.color_7};
+    color: ${({ theme }) => theme.colors.color5};
   }
 `
 

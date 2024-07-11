@@ -1,19 +1,25 @@
+import {
+  faDashboard,
+  faHome,
+  faMapMarked,
+} from "@fortawesome/free-solid-svg-icons"
+import { useState } from "react"
 import styled from "styled-components"
-import { SFlexRow } from "../../styled/containers/FlexContainers"
+import { header, routes } from "../../../utility/constants"
 import Avatar from "./Avatar"
 import CreateNew from "./CreateNew"
+import HeaderNavigation from "./HeaderNavigation"
 import Logo from "./Logo"
 import Notifications from "./Notifications"
-//import { useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 
 const username = "migo476"
 
 const SHeader = styled.div`
   width: 100vw;
-  background-color: ${({ theme }) => theme.color.color_1};
-  box-shadow: 0px 0px 5px ${({ theme }) => theme.color.color_5};
-  padding: 8px ${({ theme }) => theme.spacing.edges};
+  background-color: ${({ theme }) => theme.colors.level};
+
+  padding: 8px 30px;
   margin: 0;
   position: relative;
   box-sizing: border-box;
@@ -25,31 +31,65 @@ const SHeader = styled.div`
   gap: 5px;
 `
 
-
 const SUsername = styled.p`
   font-size: 1.2rem;
-  color: ${({ theme }) => theme.color.color_9};
+  color: ${({ theme }) => theme.colors.color3};
   padding: 0;
   margin: 0;
   font-weight: bold;
   cursor: pointer;
-  
-
 `
 
-const Header = () => {
-  //const username = useSelector((state: any) => state.username)
-  const nav = useNavigate()
+const tabs = [
+  {
+    title: "Home",
+    id: header.home,
+    icon: faHome,
+    url: routes.home,
+  },
+  {
+    title: "Activity Map",
+    id: header.map,
+    icon: faMapMarked,
+    url: routes.map,
+  },
+  {
+    title: "Analytics",
+    id: header.analytics,
+    icon: faDashboard,
+    url: routes.dashboard,
+  },
+]
 
+const Header = () => {
+  //Generic Hooks
+  const location = useLocation()
+
+  //State
+  const [activeTab, setActiveTab] = useState<string>(
+    location.pathname.replace("/", "")
+  )
+
+  //Functions
+  const handleNavigate = (url: string) => {
+    setActiveTab(url)
+  }
 
   return (
-    <SHeader>
-      <Logo />
-      <SUsername onClick={() => nav("/")}>{username}</SUsername>
-      <CreateNew />
-      <Notifications />
-      <Avatar />
-    </SHeader>
+    <>
+      <SHeader>
+        <Logo setActiveTab={handleNavigate} />
+        <SUsername>{username}</SUsername>
+        <CreateNew />
+        <Notifications />
+        <Avatar />
+      </SHeader>
+      <HeaderNavigation
+        tabs={tabs}
+        setActiveTab={setActiveTab}
+        activeTab={activeTab}
+      />
+    </>
   )
 }
 

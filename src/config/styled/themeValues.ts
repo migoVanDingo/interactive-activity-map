@@ -1,7 +1,10 @@
 export const getThemeObject = (theme: string) => {
     const themeObject = {
         colors: getThemeColors(theme), 
-
+        accent: {
+            color1: "#21b57c",
+            color1_dim: "#15a36d",
+        },
         borderRadius:{
             sm:"4px",
             md: "8px",
@@ -15,17 +18,17 @@ export const getThemeObject = (theme: string) => {
 
 const lightTheme = {
     colors: {
-        level5: "#171717",
-        level4: "#525252",
-        level3: "#8c8c8c",
-        level2: "#a8a8a8",
-        level1: "#cfcfcf",
-        level0: "#f0f0f0",
-    },
-    accent: {
-        level1: "#21b57c",
-        level1_dim: "#15a36d",
+        darkest: "black",
+        color6: "#171717",
+        color5: "#525252",
+        color4: "#8c8c8c",
+        color3: "#a8a8a8",
+        color2: "#cfcfcf",
+        color1: "#f0f0f0",
+        color0: "#f7f7f7",
+        lightest: "white"
     }
+    
 }
 
 const getThemeColors = (theme: string) => {
