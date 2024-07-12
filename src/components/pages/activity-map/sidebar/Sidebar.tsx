@@ -10,7 +10,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { SFlexCol, SFlexRow } from "../../../styled/containers/FlexContainers"
-import { useTreeData } from "../../../../hooks/useTreeData"
 
 const SContainer = styled(SFlexCol)`
   background-color: ${({ theme }) => theme.colors.color0};
@@ -67,7 +66,6 @@ const SSidebarContent = styled(SFlexCol)`
   background-color: ${({ theme }) => theme.colors.color0};
   padding: 10px;
   box-sizing: border-box;
-  border: 1px solid black;
   &.close-sidebar {
     display: none;
   }
@@ -84,6 +82,7 @@ const SFolderNode = styled(SFlexRow)<IFolderNode>`
   padding: 5px;
   border-radius: ${({ theme }) => theme.borderRadius.sm};
 
+
   margin: 0 0 0 ${({ marLeft }) => marLeft};
   align-items: center;
   justify-content: baseline;
@@ -95,15 +94,16 @@ const SFolderNode = styled(SFlexRow)<IFolderNode>`
   }
 
   &.close{
-
-    display: none;
+    height: 0px;
+    overflow: hidden;
+    padding: 0;
   }
   
 `
 
 const SFolderName = styled.div`
   margin-left: 10px;
-  font-size: 1rem;
+
   color: ${({ theme }) => theme.colors.color5};
   &.isHover {
     color: ${({ theme }) => theme.accent.color1};
@@ -117,10 +117,13 @@ const Sidebar = ({
   mapTree,
   rootDescription,
   folderOpen,
-  toggleFolderOpen
+  toggleFolderOpen,
+  selectedNode,
+  setSelectedNode,
 }: any) => {
 
   const [hover, setHover] = useState<string>("")
+  
 
   const [styleMarLeft, setStyleMarLeft] = useState<number>(0)
 
@@ -137,7 +140,24 @@ const Sidebar = ({
     setHover("")
   }
 
+  const handleToggleFolder = (e: any) => {
+ 
+    let id = e.target.id
+    if(id === ""){
+      id = e.target.parentElement.id
+    }
+    console.log('id: ', id)
+    setSelectedNode(id)
+    toggleFolderOpen(id)
+  }
 
+  useEffect(() => {
+    console.log('mapTree: ', mapTree)
+  }, [mapTree]);
+
+  const handleSelectFile = (video_name: string) => {
+    console.log('video_name: ', video_name)
+  }
 
   return (
     <SContainer className={isSidebarActive ? "" : "close-sidebar"}>
@@ -162,10 +182,10 @@ const Sidebar = ({
                 }
                 key={node.index}
                 id={node.index}
-                onClick={(e: any) => toggleFolderOpen(e)}
+                onClick={node.isFolder ? (e: any) => handleToggleFolder(e) : (e: any) => handleSelectFile(node.link)}
                 onMouseOver={() => mouseOver(node.index)}
                 onMouseOut={mouseOut}
-                className={`${hover === node.index ? "isHover":""} ${folderOpen[node.index] ? "" : "close"}`}
+                className={`${hover === node.index ? "isHover":""} ${node.index === selectedNode ? "" : folderOpen[node.index] ? "" : "close"} `}
               >
                 {folderOpen[node.index] ? (
                   <SIcon  id={node.index} className={hover === node.index  ? "isHover folder-icons" : "folder-icons"} icon={faCaretDown} />
@@ -177,7 +197,7 @@ const Sidebar = ({
                 ) : (
                   <SIcon  id={node.index} className={hover === node.index  ? "isHover folder-icons" : "folder-icons"} icon={faFile} />
                 )}
-                <SFolderName id={node.index} className={hover === node.index  ? "isHover" : ""}>{node.index}</SFolderName>
+                <SFolderName id={node.index} className={hover === node.index  ? "isHover" : ""}>{!node.isFolder ? node.index.replace("video_name:", "") : node.index}</SFolderName>
               </SFolderNode>
             )
           })}

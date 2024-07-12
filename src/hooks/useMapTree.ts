@@ -4,6 +4,7 @@ export const useMapTree = (data: any) => {
   const [mapTree, setMapTree] = useState<any>(null)
   const [rootDescription, setRootDescription] = useState<any>(null)
   const [folderOpen, setFolderOpen] = useState<any>({})
+  const [selectedNode, setSelectedNode] = useState<string>("")
   const folderOrder = [
     "cohort",
     "level",
@@ -16,67 +17,74 @@ export const useMapTree = (data: any) => {
 
   useEffect(() => {
     return () => {
-      //console.log('data', data)
       const { desc, preTree } = buildRootDescription(data.formData)
+      
       const uniqueColumnValues = gatherUniqueColumnValues(preTree, data.groups)
-      const folderNodes = createFolderNodes(
-        data.formData,
-        preTree,
-      )
+      const folderNodes = createFolderNodes(data.formData, preTree)
+      const fileNodes = createFileNodes(folderNodes,data.groups)
 
-      const folderTree = mapFolderChildren(folderNodes)
+      const folderTree = mapFolderChildren(fileNodes)
       const fullTree = mapFileChildren(folderTree, data.groups, preTree)
-      //console.log("fullTree", fullTree)
+
+      console.log('fullTree: ', fullTree)
       setRootDescription(desc)
       setMapTree(fullTree)
-      setFolderOpen(fullTree.reduce((acc: any, field: any) => {
-        acc[field.index] = field.isOpen
-        return acc
-      },{}))
+      setFolderOpen(
+        fullTree.reduce((acc: any, field: any) => {
+          acc[field.index] = field.isOpen
+          return acc
+        }, {})
+      )
     }
   }, [data])
 
+/*   useEffect(() => {
+    return () => {
+      if (selectedNode !== "") {
+        toggleFolderOpen(selectedNode)
+      }
+    }
+  }, [selectedNode]) */
+
   const mapFileChildren = (folderTree: any, groups: any, preTree: any) => {
-    //console.log("preTree", preTree)
-    //console.log("folderTree", folderTree)
-
-    if(preTree.length !== 0){
-
+    if (preTree.length !== 0) {
     } else {
-      folderTree[folderTree.length - 1].children = groups.map((group: any) => {
-        return {
-          index: "video_name:" + group.video_name,
-          key: "video_name",
-          value: group.video_name,
-          link: group.link,
-          isOpen: true,
-          isFolder: false,
-          
-        }
-      })
+      folderTree[folderTree.length - 1].children = groups.map((group: any) => group.video_name)
     }
 
     return folderTree
   }
 
   const mapFolderChildren = (folderNodes: any) => {
-   folderNodes.forEach(
-      (folder: any, index: number, arr: any) => {
-        if (index + 1 < arr.length) {
-          const child = arr[index + 1].index
-          folder.children.push(child)
-        }
+    folderNodes.forEach((item: any, index: number, arr: any) => {
+      if (index + 1 < arr.length && item.isFolder) {
+        const child = arr[index + 1].index
+        item.children.push(child)
       }
-    )
+    })
 
     return folderNodes
   }
 
-  const createFolderNodes = (
-    formData: any,
-    uniqueColumnValues: any,
-  ) => {
-    //console.log("formData", formData)
+  const createFileNodes = (folderNodes: any, groups: any) => {
+    const fileNodes = groups.map((group: any) => {
+      return {
+        index: "video_name:" + group.video_name,
+        key: "video_name",
+        value: group.video_name,
+        link: group.link,
+        isOpen: true,
+        isFolder: false,
+      }
+    })
+
+    return [
+      ...folderNodes,
+      ...fileNodes
+    ]
+  }
+
+  const createFolderNodes = (formData: any, uniqueColumnValues: any) => {
     //For each column in the matrix, create a folder node
     let baseFolder: any[] = []
     folderOrder.forEach((key: string) => {
@@ -92,8 +100,6 @@ export const useMapTree = (data: any) => {
         })
       }
     })
-
-    //console.log("baseFolder", baseFolder)
 
     uniqueColumnValues.forEach((columnArr: any) => {
       const columnKey = Object.keys(columnArr)[0]
@@ -121,7 +127,6 @@ export const useMapTree = (data: any) => {
       }
     })
     return uniqueValues
-    //console.log("uniqueValues", uniqueValues)
   }
 
   const buildRootDescription = (formData: any) => {
@@ -139,51 +144,96 @@ export const useMapTree = (data: any) => {
     return { desc, preTree }
   }
 
-  let childSwitch = "SKIP"
-  const toggleFolderOpen = (e: any) => {
-    let id
-    
-    if (e.target.id === "") {
-      id = e.target.parentElement.id
-    } else {
-      id = e.target.id
-    }
-    
- 
+  const toggleFolderOpen = (nodeIndex: string) => {
     const newFolderOpen = { ...folderOpen }
-    const folder = findParent(id, mapTree)
-    
-    toggleChildren(folder.children, newFolderOpen)
+    delegateTreeAction(nodeIndex, newFolderOpen, mapTree)
+  }
 
+  const delegateTreeAction = (
+    nodeIndex: any,
+    newFolderOpen: any,
+    tree: any
+  ) => {
 
+    //Check if Parent is Open
+    const parent = findParent(nodeIndex, mapTree)
+    if (newFolderOpen[parent.index]) {
+
+      //Parent Open Close Parent
+      let { nfo, children } = closeParent(nodeIndex, newFolderOpen)
+
+      if (children.length > 0) {
+        //Then close children
+        nfo = closeChildren(children, nfo, tree)
+      }
+
+      setFolderOpen(nfo)
+    } else {
+      //Parent Closed, open parent
+      console.log('openParent')
+      let { nfo, children } = openParent(nodeIndex, newFolderOpen)
+
+      //Open immediate children
+      if (children.length > 0) {
+        nfo = openChildren(children, nfo)
+      }
+      setFolderOpen(nfo)
+    }
+
+    setSelectedNode(nodeIndex)
+  }
+
+  const openParent = (nodeIndex: string, newFolderOpen: any) => {
+    const parent = findParent(nodeIndex, mapTree)
+    newFolderOpen[parent.index] = true
+
+    return { nfo: newFolderOpen, children: parent["children"] }
+  }
+
+  const openChildren = (children: any[], newFolderOpen: any) => {
+    children.forEach((child: any) => {
+      newFolderOpen[child] = true
+    })
+
+    return newFolderOpen
+  }
+
+  const closeParent = (nodeIndex: string, newFolderOpen: any) => {
+    const parent = findParent(nodeIndex, mapTree)
+    newFolderOpen[parent.index] = false
+
+    return { nfo: newFolderOpen, children: parent["children"] }
+  }
+
+  const closeChildren = (children: any[], newFolderOpen: any, tree: any) => {
+
+    //Check if children are open and close them
+    children.forEach((child: any) => {
+      newFolderOpen[child] = false
+
+      const parent = findParent(child, tree)
+      if (parent.children.length > 0 && !parent.index.includes("group")) {
+        closeChildren(parent.children, newFolderOpen, tree)
+      }
+    })
+
+    return newFolderOpen
   }
 
   const findParent = (nodeIndex: string, tree: any) => {
-    return tree.find((node: any) => node.index === nodeIndex)}
-
-  const toggleChildren = (children: any[], newFolderOpen: any = null) => {
-
-    console.log("children", children)
-
-    children.forEach((child: any) => {
-      newFolderOpen[child] = !newFolderOpen[child]
-      const parent = findParent(child.index, mapTree)
-      console.log("parent", parent)
-      if(parent.children.length > 0){
-
-        toggleChildren(parent.children, newFolderOpen)
-      }
-    })
-    
-    
+    return tree.find((node: any) => node.index === nodeIndex)
   }
 
-
+  const toggleFolderAndChildren = (node: any, newFolderOpen: any) => {
+    //Get the node from the newFolderOpen object
+  }
 
   return {
     mapTree,
     rootDescription,
     folderOpen,
-    toggleFolderOpen
+    toggleFolderOpen,
+    selectedNode,
+    setSelectedNode,
   }
 }

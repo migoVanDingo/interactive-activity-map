@@ -44,13 +44,10 @@ const ActivityMap = () => {
   const [isSidebarActive, setSidebarActive] = useState<boolean>(true)
 
   //Custom hooks
-  const { mapTree, rootDescription, folderOpen, toggleFolderOpen } = useMapTree(data)
+  const { mapTree, rootDescription, folderOpen, toggleFolderOpen, selectedNode, setSelectedNode } = useMapTree(data)
 
 
   //Effect Hooks
-  useEffect(() => {
-    console.log("folderOpen: ", folderOpen)
-  }, [folderOpen])
 
 
   if (loading && mapTree !== null) {
@@ -65,6 +62,8 @@ const ActivityMap = () => {
           rootDescription={rootDescription}
           folderOpen={folderOpen}
           toggleFolderOpen={toggleFolderOpen}
+          selectedNode={selectedNode}
+          setSelectedNode={setSelectedNode}
         />
         <MapMain />
       </SContainer>
