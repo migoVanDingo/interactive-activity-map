@@ -13,6 +13,7 @@ import MainPage, {
 import ActivityMap, {
   loader as activityMapLoader,
 } from "./components/pages/activity-map/ActivityMap"
+import '@mantine/core/styles.css';
 
 const router = createBrowserRouter([
   {

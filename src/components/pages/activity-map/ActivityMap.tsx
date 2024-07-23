@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useLoaderData, useNavigation } from "react-router-dom"
 import styled from "styled-components"
+import { useMapTree } from "../../../hooks/useMapTree"
 import { loadingMessages } from "../../../utility/constants"
 import LoadingSpinner from "../../common/LoadingSpinner"
 import { SFlexCol } from "../../styled/containers/FlexContainers"
 import MapMain from "./MapMain"
 import Sidebar from "./sidebar/Sidebar"
-import { useMapTree } from "../../../hooks/useMapTree"
+import { useAnnotationData } from "../../../hooks/useAnnotationData"
 
 const SContainer = styled(SFlexCol)`
   width: 100%;
@@ -44,11 +45,35 @@ const ActivityMap = () => {
   const [isSidebarActive, setSidebarActive] = useState<boolean>(true)
 
   //Custom hooks
-  const { mapTree, rootDescription, folderOpen, toggleFolderOpen, selectedNode, setSelectedNode } = useMapTree(data)
+  //Generate folder tree for sidebar
+  const {
+    mapTree,
+    rootDescription,
+    folderOpen,
+    toggleFolderOpen,
+    selectedNode,
+    setSelectedNode,
+  } = useMapTree(data)
 
+  //process annotation data and map interactions
+  const {
+    participants,
+    participantListFormValues,
+    handleUpdateParticipants,
+    actions,
+    actionListFormValues,
+    selectedAnnotation,
+    setSelectedAnnotation,
+    handleUpdateActions,
+  } = useAnnotationData(data)
 
   //Effect Hooks
 
+  //Functions
+  const handleSelectFile = (video_name: string) => {
+    video_name = video_name.replace(/\\/g, "/")
+    setSelectedAnnotation(video_name)
+  }
 
   if (loading && mapTree !== null) {
     return <LoadingSpinner message={loadingMessages.map} />
@@ -64,8 +89,17 @@ const ActivityMap = () => {
           toggleFolderOpen={toggleFolderOpen}
           selectedNode={selectedNode}
           setSelectedNode={setSelectedNode}
+          handleSelectFile={handleSelectFile}
         />
-        <MapMain />
+        <MapMain
+          participants={participants}
+          toggleParticipantList={participantListFormValues}
+          handleUpdateParticipants={handleUpdateParticipants}
+          actions={actions}
+          toggleActionList={actionListFormValues}
+          handleUpdateActions={handleUpdateActions}
+          selectedAnnotation={selectedAnnotation}
+        />
       </SContainer>
     )
 }
@@ -80,5 +114,7 @@ export const loader = () => {
     ? JSON.parse(localStorage.getItem("groups")!)
     : []
 
-  return { formData, groups }
+  const annotationData = ""
+
+  return { formData, groups, annotationData }
 }

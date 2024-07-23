@@ -14,6 +14,8 @@
     "@fortawesome/free-regular-svg-icons": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@mantine/core": "^7.11.1",
+    "@mantine/hooks": "^7.11.1",
     "@reduxjs/toolkit": "^2.2.6",
     "react": "^18.3.1",
     "react-complex-tree": "^2.4.4",
@@ -31,6 +33,9 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
+    "postcss": "^8.4.39",
+    "postcss-preset-mantine": "^1.15.0",
+    "postcss-simple-vars": "^7.0.1",
     "typescript": "^5.2.2",
     "vite": "^5.3.1"
   }

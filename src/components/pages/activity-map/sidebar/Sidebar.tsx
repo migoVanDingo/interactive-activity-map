@@ -120,6 +120,7 @@ const Sidebar = ({
   toggleFolderOpen,
   selectedNode,
   setSelectedNode,
+  handleSelectFile
 }: any) => {
 
   const [hover, setHover] = useState<string>("")
@@ -155,9 +156,7 @@ const Sidebar = ({
     console.log('mapTree: ', mapTree)
   }, [mapTree]);
 
-  const handleSelectFile = (video_name: string) => {
-    console.log('video_name: ', video_name)
-  }
+  
 
   return (
     <SContainer className={isSidebarActive ? "" : "close-sidebar"}>
@@ -187,11 +186,11 @@ const Sidebar = ({
                 onMouseOut={mouseOut}
                 className={`${hover === node.index ? "isHover":""} ${node.index === selectedNode ? "" : folderOpen[node.index] ? "" : "close"} `}
               >
-                {folderOpen[node.index] ? (
+                {node.isFolder ? (folderOpen[node.index] ? (
                   <SIcon  id={node.index} className={hover === node.index  ? "isHover folder-icons" : "folder-icons"} icon={faCaretDown} />
                 ) : (
                   <SIcon  id={node.index} className={hover === node.index  ? "isHover folder-icons" : "folder-icons"} icon={faCaretRight} />
-                )}
+                )) : ""}
                 {node.isFolder ? (
                   <SIcon  id={node.index} className={hover === node.index  ? "isHover folder-icons" : "folder-icons"} icon={faFolder} />
                 ) : (
