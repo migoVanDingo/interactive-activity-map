@@ -93,10 +93,10 @@ const ActivityMap = () => {
         />
         <MapMain
           participants={participants}
-          toggleParticipantList={participantListFormValues}
+          participantListFormValues={participantListFormValues}
           handleUpdateParticipants={handleUpdateParticipants}
           actions={actions}
-          toggleActionList={actionListFormValues}
+          actionListFormValues={actionListFormValues}
           handleUpdateActions={handleUpdateActions}
           selectedAnnotation={selectedAnnotation}
         />

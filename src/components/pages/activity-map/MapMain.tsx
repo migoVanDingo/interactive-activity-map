@@ -40,7 +40,7 @@ const SContainer = styled.div`
 
   &.layout-2 {
     grid-template-columns: repeat(4, calc(calc(858px * 3) / 16)) auto;
-    grid-template-rows: 80px 300px auto;
+    grid-template-rows: 40px 360px auto;
     grid-template-areas:
       "header  header  header  header  header"
       "options options options  player  player"
@@ -55,6 +55,93 @@ const SOptionsContainer = styled(SFlexRow)`
   padding: 10px 0;
   border: 1px solid red;
 `
+
+
+const actions = [
+  {
+    title: "Talking",
+    id: "",
+    toggle: false,
+    color: "red"
+  },
+  {
+    title: "Typing",
+    id: "",
+    toggle: false,
+    color: "blue"
+  },
+  {
+    title: "Writing",
+    id: "",
+    toggle: false,
+    color: "green"
+  },
+]
+
+const annotations = [
+  {
+    title: "VJ",
+    toggle: true,
+    action: "Talking",
+  },
+  {
+    title: "Dave",
+    toggle: true,
+    action: "Talking",
+  },
+  {
+    title: "Johann",
+    toggle: true,
+    action: "Talking",
+  },
+  {
+    title: "Migo",
+    toggle: true,
+    action: "Talking",
+  },
+
+  {
+    title: "VJ",
+    toggle: true,
+    action: "Typing",
+  },
+  {
+    title: "Dave",
+    toggle: true,
+    action: "Typing",
+  },
+  {
+    title: "Johann",
+    toggle: true,
+    action: "Typing",
+  },
+  {
+    title: "Migo",
+    toggle: true,
+    action: "Typing",
+  },
+
+  {
+    title: "VJ",
+    toggle: true,
+    action: "Writing",
+  },
+  {
+    title: "Dave",
+    toggle: true,
+    action: "Writing",
+  },
+  {
+    title: "Johann",
+    toggle: true,
+    action: "Writing",
+  },
+  {
+    title: "Migo",
+    toggle: true,
+    action: "Writing",
+  },
+]
 
 const MapMain = ({
   participants,
@@ -75,10 +162,11 @@ const MapMain = ({
 
   useEffect(() => {
    return () => {
-        console.log("selectedAnnotation: ", selectedAnnotation)
+        console.log("participantListFormValues: ", participantListFormValues)
+        console.log("actionListFormValues: ", participantListFormValues)
     }
     
-  }, [selectedAnnotation]);
+  }, [participantListFormValues, actionListFormValues, selectedAnnotation]);
   return (
     <SContainer className={layout}>
       <ActivityMapHeader

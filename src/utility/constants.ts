@@ -10,8 +10,17 @@ export const header = {
     analytics: "analytics"
 }
 
+export const services = {
+    datastore: {
+        port: "5012",
+        endpoint: {
+            aolme_videos: "/api/datastore/aolme-videos",
+        }
+    }
+}
+
 export const api = {
-    baseUrl: "http://localhost:5000",
+    baseUrl: "http://localhost:",
     group: "/api/group"
 }
 

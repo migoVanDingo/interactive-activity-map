@@ -11,7 +11,8 @@ import { mainSelectionFormProps } from "./mainSelectionFormProps"
 
 const MainPage = () => {
   // Generic Hooks
-  const groups = useLoaderData() //Gets data from loader
+  let groups = useLoaderData() as any //Gets data from loader
+  groups = groups.data
   const navigation = useNavigation() //Gets navigation state
   const loading = navigation.state === "loading"
 
@@ -31,6 +32,10 @@ const MainPage = () => {
   useEffect(() => {
     dispatch(setGroups(groups))
   }, [groups])
+
+  useEffect(() => {
+    console.log("Activity Map Groups: ", activityMapGroups)
+  }, [activityMapGroups])
 
   // Handles form submission, sets data to local storage and navigates to the Activity Map page
   const handleSubmit = (event: React.FormEvent) => {

@@ -7,6 +7,7 @@ const SContainer = styled(SFlexRow)`
   width: 100%;
   grid-area: header;
   box-sizing: border-box;
+
 `
 
 const SHeadingContainer = styled(SFlexCol)`
@@ -31,10 +32,12 @@ const SSubTitle = styled.p`
 `
 
 const SButtonContainer = styled(SFlexRow)`
-  padding: 10px 0;
+  padding: 0px 0;
   gap: 10px;
   margin-left: auto;
-  align-items: flex-end;
+  align-items: flex-start;
+
+
 `
 
 const SDownloadButton = styled.button`
@@ -78,7 +81,7 @@ const ActivityMapHeader = ({ title, id, handleSetLayout }: any) => {
     <SContainer>
       <SHeadingContainer>
         <STitle>Title: {title}</STitle>
-        <SSubTitle>Video ID: {id}</SSubTitle>
+        {/* <SSubTitle>Video ID: {id}</SSubTitle> */}
       </SHeadingContainer>
       <SButtonContainer>
         <SLayoutButton onClick={handleSetLayout}>

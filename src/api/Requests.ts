@@ -1,9 +1,9 @@
 import { api } from "../utility/constants"
 export class Requests {
-  public static async doGet(endpoint: string) {
+  public static async doGet(port: string, endpoint: string) {
     try {
         console.log(api.baseUrl + endpoint)
-      const response = await fetch(api.baseUrl + endpoint)
+      const response = await fetch(api.baseUrl + port + endpoint)
 
       if (!response.ok) {
         throw new Error("Network response was not ok")

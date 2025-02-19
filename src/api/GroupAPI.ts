@@ -1,12 +1,12 @@
-import { api } from "../utility/constants";
+import { api, services } from "../utility/constants";
 import { Requests } from "./Requests";
 
 export class GroupAPI {
     public static getGroups() {
-        return Requests.doGet(api.group)
+        return Requests.doGet(services.datastore.port, services.datastore.endpoint.aolme_videos)
     }
 
-    public static getCategories() {
+    /* public static getCategories() {
         return Requests.doGet(api.group + "/categories")
-    }
+    } */
 }

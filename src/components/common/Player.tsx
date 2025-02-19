@@ -8,7 +8,7 @@ interface IContainer {
 const SContainer = styled(SFlexCol)<IContainer>`
   grid-area: player;
   width: 100%;
-  height: ${p => p.height + "px"};
+  height: ${p => p.height ? p.height + "px" : "100%"};
   padding: 0;
   margin: 0;
   align-items: center;
@@ -20,7 +20,7 @@ const SContainer = styled(SFlexCol)<IContainer>`
 
 
 function Player({ currentTime, path, layout }: any) {
-  const videoRef = useRef(null)
+  const videoRef = useRef(null) as any
 
   const [height, setHeight] = React.useState(0);
   const [width, setWidth] = React.useState(0);  
@@ -51,8 +51,8 @@ function Player({ currentTime, path, layout }: any) {
         break;
       
       case 'layout-2':
-        setHeight(270);
-        setWidth(480);
+        setHeight(360);
+        setWidth(640);
         break;
     }
   }, [layout]);
